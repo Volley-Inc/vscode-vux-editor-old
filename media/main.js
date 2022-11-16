@@ -11,6 +11,7 @@ function debouncedRunloop(fn) {
   }
 }
 
+
 (function() {
   const vscode = acquireVsCodeApi();
   const preview = document.getElementById('preview');
@@ -35,11 +36,11 @@ function debouncedRunloop(fn) {
 
   function getState() {
     const prevState = vscode.getState();
-    if (!prevState) {
-      setState(DEFAULT_STATE);
-      return DEFAULT_STATE;
-    }
-    return prevState;
+    setState(DEFAULT_STATE);
+    return DEFAULT_STATE;
+  // if (!prevState) {
+  //   }
+  //   return prevState;
   }
 
   function zoom(value) {
@@ -103,6 +104,14 @@ function debouncedRunloop(fn) {
     img.src = imgSrc;
   }
 
+  window.postClickNode = function(name) {
+    vscode.postMessage({
+      command: 'onClickNode',
+      name
+    });
+  }
+  
+
   function postParseError(error) {
     vscode.postMessage({
       command: 'onParseError',
@@ -134,7 +143,10 @@ function debouncedRunloop(fn) {
   function render(code, configuration, backgroundColor) {
     try {
       mermaid.parse(code);
-      mermaid.initialize(JSON.parse(configuration));
+      mermaid.initialize({
+        ...JSON.parse(configuration),
+        securityLevel: 'loose'
+      });
     } catch (error) {
       postParseError(error);
       return;

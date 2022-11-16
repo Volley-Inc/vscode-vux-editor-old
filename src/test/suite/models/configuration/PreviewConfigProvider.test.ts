@@ -26,7 +26,7 @@ suite('PreviewConfigProvider Tests', function() {
     };
   });
 
-  test('should return mermaid-editor.preview scoped config in extension config', () => {
+  test('should return vux-editor.preview scoped config in extension config', () => {
     when(mocks.configuration.backgroundColor).thenReturn('#123');
     when(mocks.configuration.defaultMermaidConfig).thenReturn(
       '/path/to/config'
@@ -103,7 +103,7 @@ suite('PreviewConfigProvider Tests', function() {
     mocks.reset();
   });
 
-  test('should return mermaid-editor.preview.errorOutputOnError in extension config', () => {
+  test('should return vux-editor.preview.errorOutputOnError in extension config', () => {
     when(mocks.configuration.errorOutputOnSave)
       .thenReturn(false)
       .thenReturn(true);

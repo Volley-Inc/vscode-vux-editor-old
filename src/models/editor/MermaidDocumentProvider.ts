@@ -1,11 +1,11 @@
-import * as vscode from 'vscode';
 import * as path from 'path';
+import * as vscode from 'vscode';
 import * as constants from '../../constants';
-import Attribute from './Attribute';
-import Code from './Code';
-import AttributeParseService from './AttributeParseService';
-import MermaidDocument from './MermaidDocument';
 import TextDocumentProvider from '../editor/TextDocumentProvider';
+import Attribute from './Attribute';
+import AttributeParseService from './AttributeParseService';
+import Code from './Code';
+import MermaidDocument from './MermaidDocument';
 
 export interface MermaidDocumentChangeEvent {
   mermaidDocument: MermaidDocument;
@@ -111,7 +111,9 @@ class MermaidDocumentProvider {
   public async onDidSaveTextDocument(
     document: vscode.TextDocument | undefined
   ): Promise<void> {
-    document && this._isMermaid(document) && this._saveEventEmitter.fire();
+    if (document && this._isMermaid(document)) {
+      this._saveEventEmitter.fire();
+    }
   }
 }
 

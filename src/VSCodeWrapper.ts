@@ -1,11 +1,11 @@
-import * as vscode from 'vscode';
-import TextDocumentProvider from './models/editor/TextDocumentProvider';
-import ConfigurationProvider from './models/configration/ConfigurationProvider';
-import FileSystemService from './models/FileSystemService';
 import { TextDecoder } from 'util';
-import WebViewPanelProvider from './view/WebViewPanelProvider';
-import SystemCommandService from './controllers/SystemCommandService';
+import * as vscode from 'vscode';
 import { PopupViewProvider } from './controllers/PopupViewProvider';
+import SystemCommandService from './controllers/SystemCommandService';
+import ConfigurationProvider from './models/configration/ConfigurationProvider';
+import TextDocumentProvider from './models/editor/TextDocumentProvider';
+import FileSystemService from './models/FileSystemService';
+import WebViewPanelProvider from './view/WebViewPanelProvider';
 
 export default class VSCodeWrapper
   implements
@@ -63,12 +63,13 @@ export default class VSCodeWrapper
       | { viewColumn: vscode.ViewColumn; preserveFocus?: boolean },
     options?: vscode.WebviewPanelOptions & vscode.WebviewOptions
   ): vscode.WebviewPanel {
-    return vscode.window.createWebviewPanel(
+    const panel = vscode.window.createWebviewPanel(
       viewType,
       title,
       showOptions,
       options
     );
+    return panel;
   }
 
   public registerWebviewPanelSerializer(

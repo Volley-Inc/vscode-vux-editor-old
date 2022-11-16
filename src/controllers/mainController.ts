@@ -1,12 +1,30 @@
-import { Store } from 'redux';
+/* eslint-disable prettier/prettier */
 import * as path from 'path';
+import { Store } from 'redux';
 import * as constants from '../constants';
-import isEmpty = require('lodash/isEmpty');
-import isNumber = require('lodash/isNumber');
-import isNaN = require('lodash/isNaN');
-import toNumber = require('lodash/toNumber');
-import PreviewConfigProvider from '../models/configration/PreviewConfigProvider';
+import GeneratorProgressStatusBar from '../GeneratorProgressStatusBar';
+import Logger from '../Logger';
+import GeneratorConfigProvider, { GeneratorConfigProperty } from '../models/configration/GeneratorConfigProvider';
+import MermaidConfigService from '../models/configration/MermaidConfigService';
+import PreviewConfigProvider, {
+  PreviewConfigChangeEvent,
+  PreviewConfigProperty
+} from '../models/configration/PreviewConfigProvider';
+import MermaidDocument from '../models/editor/MermaidDocument';
 import MermaidDocumentProvider from '../models/editor/MermaidDocumentProvider';
+import FileGeneratorService from '../models/FileGeneratorService';
+import Queue from '../utils/Queue';
+import DiagramWebView from '../view/DiagramWebView';
+import {
+  CaptureImageEndEvent, CaptureImageTarget,
+  DiagramWebViewRenderParams,
+  ErrorEvent
+} from '../view/DiagramWebViewTypes';
+import WebViewManager from '../view/WebViewManager';
+import { styleLinks } from '../vux';
+import { styleScenes } from '../vux/parsing/scenes';
+import { PopupViewProvider } from './PopupViewProvider';
+import SystemCommandService from './SystemCommandService';
 import {
   createChangeMermaidDocumentEvent,
   createChangePreviewConfigBackgroundColorEvent,
@@ -14,28 +32,10 @@ import {
   ViewState,
   ViewStateAction
 } from './viewStateStore';
-import MermaidDocument from '../models/editor/MermaidDocument';
-import {
-  PreviewConfigChangeEvent,
-  PreviewConfigProperty
-} from '../models/configration/PreviewConfigProvider';
-import WebViewManager from '../view/WebViewManager';
-import DiagramWebView from '../view/DiagramWebView';
-import {
-  CaptureImageTarget,
-  DiagramWebViewRenderParams,
-  ErrorEvent
-} from '../view/DiagramWebViewTypes';
-import { GeneratorConfigProperty } from '../models/configration/GeneratorConfigProvider';
-import GeneratorConfigProvider from '../models/configration/GeneratorConfigProvider';
-import FileGeneratorService from '../models/FileGeneratorService';
-import { CaptureImageEndEvent } from '../view/DiagramWebViewTypes';
-import SystemCommandService from './SystemCommandService';
-import MermaidConfigService from '../models/configration/MermaidConfigService';
-import Logger from '../Logger';
-import { PopupViewProvider } from './PopupViewProvider';
-import GeneratorProgressStatusBar from '../GeneratorProgressStatusBar';
-import Queue from '../utils/Queue';
+import isEmpty = require('lodash/isEmpty');
+import isNumber = require('lodash/isNumber');
+import isNaN = require('lodash/isNaN');
+import toNumber = require('lodash/toNumber');
 
 // for test
 export const backgroundSelector = (viewState: ViewState): string => {
@@ -45,8 +45,8 @@ export const backgroundSelector = (viewState: ViewState): string => {
   return !isEmpty(individualbackgroundColor)
     ? individualbackgroundColor
     : !isEmpty(defaultBackgroundColor)
-    ? defaultBackgroundColor
-    : 'white';
+      ? defaultBackgroundColor
+      : 'white';
 };
 
 // for test
@@ -75,6 +75,18 @@ export const isPositiveNumberStr = (str: string): boolean => {
     return false;
   }
   return num > 0;
+};
+
+type MermaidLine = {
+  from: string;
+  to: string;
+  link: string;
+};
+
+type MermaidLink = {
+  name: string;
+  cohort: string;
+  group: string;
 };
 
 class MainController {
@@ -179,7 +191,13 @@ class MainController {
     this._diagramWebView?.bind(
       this._viewStateStore,
       async (viewState: ViewState): Promise<DiagramWebViewRenderParams> => {
-        const code = viewState.mermaidDocument.code.value;
+        const styles = styleLinks(viewState.mermaidDocument.code.value);
+
+        const code = `
+${viewState.mermaidDocument.code.value}
+${styleLinks(viewState.mermaidDocument.code.value)}
+${styleScenes(viewState.mermaidDocument.code.value)}
+`;
         const backgroundColor = backgroundSelector(viewState);
         const mermaidConfig = await this._mermaidConfigService
           .getMermaidConfig(mermaidConfigSelector(viewState))
@@ -323,7 +341,7 @@ class MainController {
         );
       } catch (error) {
         Logger.appendLine('[OutputFileFailure]');
-        Logger.appendLine(error.message);
+        Logger.appendLine((error as any).message);
         Logger.show();
         this._popupViewProvider.showErrorMessage(
           constants.MESSAGE_GENERATE_IMAGE_FAILURE

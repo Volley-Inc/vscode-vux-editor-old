@@ -1,9 +1,9 @@
 {
-  "name": "vscode-mermaid-editor",
-  "displayName": "Mermaid Editor",
-  "description": "Live editor for mermaid.js in Visual Studio Code",
+  "name": "vscode-vux-editor",
+  "displayName": "VUX Editor",
+  "description": "Live editor for mermaid Voice-UX diagrams in Visual Studio Code",
   "version": "0.17.1",
-  "publisher": "tomoyukim",
+  "publisher": "ldlework",
   "license": "MIT",
   "engines": {
     "vscode": "^1.44.0"
@@ -23,12 +23,12 @@
   "icon": "images/logo.png",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tomoyukim/vscode-mermaid-editor.git"
+    "url": "https://github.com/Volley-Inc/vscode-vux-editor.git"
   },
-  "homepage": "https://github.com/tomoyukim/vscode-mermaid-editor",
-  "bugs": "https://github.com/tomoyukim/vscode-mermaid-editor/issues",
+  "homepage": "https://github.com/Volley-Inc/vscode-vux-editor",
+  "bugs": "https://github.com/Volley-Inc/vscode-vux-editor/issues",
   "activationEvents": [
-    "onWebviewPanel:mermaid-editor-preview",
+    "onWebviewPanel:vux-editor-preview",
     "onLanguage:mermaid"
   ],
   "main": "./dist/extension",
@@ -48,9 +48,9 @@
     "configuration": [
       {
         "type": "object",
-        "title": "mermaid-editor configuration",
+        "title": "vux-editor configuration",
         "properties": {
-          "mermaid-editor.preview.defaultMermaidConfig": {
+          "vux-editor.preview.defaultMermaidConfig": {
             "type": [
               "string",
               "null"
@@ -58,17 +58,17 @@
             "default": null,
             "description": "Relative or absolute path to the default configuration json file for mermaid.js"
           },
-          "mermaid-editor.preview.backgroundColor": {
+          "vux-editor.preview.backgroundColor": {
             "type": "string",
             "default": "white",
             "description": "default background color for live preview and generated image."
           },
-          "mermaid-editor.preview.errorOutputOnSave": {
+          "vux-editor.preview.errorOutputOnSave": {
             "type": "boolean",
             "default": true,
             "description": "show output console when saving file if there's error log."
           },
-          "mermaid-editor.generate.type": {
+          "vux-editor.generate.type": {
             "type": "string",
             "default": "svg",
             "enum": [
@@ -79,7 +79,7 @@
             ],
             "description": "output file type [svg, png, jpg, webp]"
           },
-          "mermaid-editor.generate.outputPath": {
+          "vux-editor.generate.outputPath": {
             "type": [
               "string",
               "null"
@@ -87,17 +87,17 @@
             "default": null,
             "description": "relative path to the output target directory from project root"
           },
-          "mermaid-editor.generate.useCurrentPath": {
+          "vux-editor.generate.useCurrentPath": {
             "type": "boolean",
             "default": true,
             "description": "use relative output path as same as target mmd file instead of 'outputPath'"
           },
-          "mermaid-editor.generate.scale": {
+          "vux-editor.generate.scale": {
             "type": "number",
             "default": "1.0",
             "description": "scale of the output image."
           },
-          "mermaid-editor.generate.quality": {
+          "vux-editor.generate.quality": {
             "type": "number",
             "default": "1.0",
             "description": "quality of the output image."
@@ -107,154 +107,154 @@
     ],
     "commands": [
       {
-        "command": "mermaid-editor.generate.clipboard",
-        "title": "Mermaid:Copy image",
+        "command": "vux-editor.generate.clipboard",
+        "title": "VUX: Copy image",
         "icon": {
           "light": "./images/light/icon-copy.svg",
           "dark": "./images/dark/icon-copy.svg"
         }
       },
       {
-        "command": "mermaid-editor.generate.file",
-        "title": "Mermaid:Generate image",
+        "command": "vux-editor.generate.file",
+        "title": "VUX: Generate image",
         "icon": {
           "light": "./images/light/icon-dl.svg",
           "dark": "./images/dark/icon-dl.svg"
         }
       },
       {
-        "command": "mermaid-editor.preview",
-        "title": "Mermaid:Preview diagram",
+        "command": "vux-editor.preview",
+        "title": "VUX: Preview diagram",
         "icon": {
           "light": "./images/light/icon-eye.svg",
           "dark": "./images/dark/icon-eye.svg"
         }
       },
       {
-        "command": "mermaid-editor.preview.zoomin",
-        "title": "Mermaid:Zoom in",
+        "command": "vux-editor.preview.zoomin",
+        "title": "VUX: Zoom in",
         "icon": {
           "light": "./images/light/icon-zoom-in.svg",
           "dark": "./images/dark/icon-zoom-in.svg"
         }
       },
       {
-        "command": "mermaid-editor.preview.zoomout",
-        "title": "Mermaid:Zoom out",
+        "command": "vux-editor.preview.zoomout",
+        "title": "VUX: Zoom out",
         "icon": {
           "light": "./images/light/icon-zoom-out.svg",
           "dark": "./images/dark/icon-zoom-out.svg"
         }
       },
       {
-        "command": "mermaid-editor.preview.zoomreset",
-        "title": "Mermaid:Reset zoom"
+        "command": "vux-editor.preview.zoomreset",
+        "title": "VUX: Reset zoom"
       },
       {
-        "command": "mermaid-editor.preview.zoomto",
-        "title": "Mermaid:Zoom to specific scale"
+        "command": "vux-editor.preview.zoomto",
+        "title": "VUX: Zoom to specific scale"
       }
     ],
     "keybindings": [
       {
-        "command": "mermaid-editor.generate.clipboard",
+        "command": "vux-editor.generate.clipboard",
         "key": "ctrl+alt+;",
-        "when": "mermaidPreviewActive"
+        "when": "vuxPreviewActive"
       },
       {
-        "command": "mermaid-editor.generate.file",
+        "command": "vux-editor.generate.file",
         "key": "ctrl+alt+]",
-        "when": "mermaidPreviewEnabled && resourceExtname == .mmd"
+        "when": "vuxPreviewEnabled && resourceExtname == .mmd"
       },
       {
-        "command": "mermaid-editor.preview",
+        "command": "vux-editor.preview",
         "key": "ctrl+alt+[",
         "when": "resourceExtname == .mmd"
       },
       {
-        "command": "mermaid-editor.preview.zoomin",
+        "command": "vux-editor.preview.zoomin",
         "key": "ctrl+alt+=",
-        "when": "mermaidPreviewVisible"
+        "when": "vuxPreviewVisible"
       },
       {
-        "command": "mermaid-editor.preview.zoomout",
+        "command": "vux-editor.preview.zoomout",
         "key": "ctrl+alt+-",
-        "when": "mermaidPreviewVisible"
+        "when": "vuxPreviewVisible"
       },
       {
-        "command": "mermaid-editor.preview.zoomreset",
+        "command": "vux-editor.preview.zoomreset",
         "key": "ctrl+alt+0",
-        "when": "mermaidPreviewVisible"
+        "when": "vuxPreviewVisible"
       }
     ],
     "menus": {
       "editor/context": [
         {
-          "when": "mermaidPreviewEnabled && resourceExtname == .mmd",
-          "command": "mermaid-editor.generate.file",
+          "when": "vuxPreviewEnabled && resourceExtname == .mmd",
+          "command": "vux-editor.generate.file",
           "group": "navigation"
         },
         {
           "when": "resourceExtname == .mmd",
-          "command": "mermaid-editor.preview",
+          "command": "vux-editor.preview",
           "group": "navigation"
         }
       ],
       "editor/title": [
         {
-          "when": "mermaidPreviewEnabled && resourceExtname == .mmd",
-          "command": "mermaid-editor.generate.file",
+          "when": "vuxPreviewEnabled && resourceExtname == .mmd",
+          "command": "vux-editor.generate.file",
           "group": "navigation"
         },
         {
           "when": "resourceExtname == .mmd",
-          "command": "mermaid-editor.preview",
+          "command": "vux-editor.preview",
           "group": "navigation"
         },
         {
-          "when": "mermaidPreviewActive",
-          "command": "mermaid-editor.preview.zoomin",
+          "when": "vuxPreviewActive",
+          "command": "vux-editor.preview.zoomin",
           "group": "navigation"
         },
         {
-          "when": "mermaidPreviewActive",
-          "command": "mermaid-editor.preview.zoomout",
+          "when": "vuxPreviewActive",
+          "command": "vux-editor.preview.zoomout",
           "group": "navigation"
         },
         {
-          "when": "mermaidPreviewActive",
-          "command": "mermaid-editor.generate.clipboard",
+          "when": "vuxPreviewActive",
+          "command": "vux-editor.generate.clipboard",
           "group": "navigation"
         }
       ],
       "commandPalette": [
         {
-          "command": "mermaid-editor.generate.clipboard",
-          "when": "mermaidPreviewActive"
+          "command": "vux-editor.generate.clipboard",
+          "when": "vuxPreviewActive"
         },
         {
-          "command": "mermaid-editor.generate.file",
-          "when": "mermaidPreviewEnabled && resourceExtname == .mmd"
+          "command": "vux-editor.generate.file",
+          "when": "vuxPreviewEnabled && resourceExtname == .mmd"
         },
         {
-          "command": "mermaid-editor.preview",
+          "command": "vux-editor.preview",
           "when": "resourceExtname == .mmd"
         },
         {
-          "command": "mermaid-editor.preview.zoomin",
-          "when": "mermaidPreviewVisible"
+          "command": "vux-editor.preview.zoomin",
+          "when": "vuxPreviewVisible"
         },
         {
-          "command": "mermaid-editor.preview.zoomout",
-          "when": "mermaidPreviewVisible"
+          "command": "vux-editor.preview.zoomout",
+          "when": "vuxPreviewVisible"
         },
         {
-          "command": "mermaid-editor.preview.zoomreset",
-          "when": "mermaidPreviewVisible"
+          "command": "vux-editor.preview.zoomreset",
+          "when": "vuxPreviewVisible"
         },
         {
-          "command": "mermaid-editor.preview.zoomto",
-          "when": "mermaidPreviewVisible"
+          "command": "vux-editor.preview.zoomto",
+          "when": "vuxPreviewVisible"
         }
       ]
     }

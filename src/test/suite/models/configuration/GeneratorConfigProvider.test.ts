@@ -35,7 +35,7 @@ suite('GeneratorConfigProvider Tests', function() {
     };
   });
 
-  test('should return workspaceFolder path when mermaid-editor.generator.outputPath is null', () => {
+  test('should return workspaceFolder path when vux-editor.generator.outputPath is null', () => {
     when(mocks.configuration.outputPath).thenReturn(null);
     when(mocks.configuration.useCurrentPath).thenReturn(false);
 
@@ -71,7 +71,7 @@ suite('GeneratorConfigProvider Tests', function() {
     mocks.reset();
   });
 
-  test('should return mermaid-editor.generator in extension config', () => {
+  test('should return vux-editor.generator in extension config', () => {
     when(mocks.configuration.useCurrentPath).thenReturn(true);
     when(mocks.configuration.type).thenReturn('jpg');
     when(mocks.configuration.scale).thenReturn('1.0');
@@ -119,7 +119,7 @@ suite('GeneratorConfigProvider Tests', function() {
     mocks.reset();
   });
 
-  test('should return undefined when mermaid-editor.generator.useCurrentPath is true', () => {
+  test('should return undefined when vux-editor.generator.useCurrentPath is true', () => {
     when(mocks.configuration.outputPath).thenReturn('/path/to/img/output');
     when(mocks.configuration.useCurrentPath).thenReturn(true);
 
@@ -150,7 +150,7 @@ suite('GeneratorConfigProvider Tests', function() {
     mocks.reset();
   });
 
-  test('should return mermaid-editor.generator.outputPath in extension config', () => {
+  test('should return vux-editor.generator.outputPath in extension config', () => {
     const mockedDocument = mock<vscode.TextDocument>();
     const dummyUri = vscode.Uri.file('/dummy/uri');
     when(mockedDocument.uri).thenReturn(dummyUri);
@@ -237,7 +237,7 @@ suite('GeneratorConfigProvider Tests', function() {
     mocks.reset();
   });
 
-  test('should return mermaid-editor.generator.outputPath in extension config', () => {
+  test('should return vux-editor.generator.outputPath in extension config', () => {
     when(mocks.textDocumentProvider.activeTextDocument).thenReturn(undefined);
 
     when(mocks.configuration.outputPath).thenReturn('/path/to/img/output');

@@ -24,6 +24,11 @@ export interface WebViewEventOnTakeImage {
   data: string;
 }
 
+export interface WebViewEventOnClickNode {
+  command: 'onClickNode';
+  name: string;
+}
+
 export interface WebViewEventOnCopyImage {
   command: 'onCopyImage';
 }
@@ -39,6 +44,7 @@ export interface WebViewEventOnParseError {
 }
 
 export type WebViewEvent =
+  | WebViewEventOnClickNode
   | WebViewEventOnTakeImage
   | WebViewEventOnCopyImage
   | WebViewEventOnFaileTakeImage

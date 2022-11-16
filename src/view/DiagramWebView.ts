@@ -1,8 +1,10 @@
-import * as vscode from 'vscode';
-import * as path from 'path';
-import * as constants from '../constants';
 import get from 'lodash/get';
+import * as path from 'path';
+import * as vscode from 'vscode';
+import * as constants from '../constants';
+import { ViewState, ViewStateAction } from '../controllers/viewStateStore';
 import FileSystemService from '../models/FileSystemService';
+import { findScene, openFile, searchForScene } from '../vux';
 import {
   CaptureImageEndEvent,
   CaptureImageParams,
@@ -11,7 +13,7 @@ import {
   WebViewEvent
 } from './DiagramWebViewTypes';
 import Renderer, { RendererError } from './Renderer';
-import { ViewState, ViewStateAction } from '../controllers/viewStateStore';
+
 
 type ShowOptions = {
   preserveFocus: boolean;
@@ -77,7 +79,7 @@ export default class DiagramWebView extends Renderer<
     } catch (error) {
       this._errorEventEmitter.fire({
         kind: 'error/mermaid-config-json-parse',
-        message: error.message
+        message: (error as any).message
       });
     }
 
@@ -287,6 +289,13 @@ export default class DiagramWebView extends Renderer<
           message: message.error.str
         });
         return;
+      case 'onClickNode':
+        const scenePath = findScene(message.name);
+        if (scenePath) {
+          openFile(scenePath);
+        } else {
+          searchForScene(message.name);
+        }
     }
   }
 
