@@ -191,7 +191,6 @@ class MainController {
     this._diagramWebView?.bind(
       this._viewStateStore,
       async (viewState: ViewState): Promise<DiagramWebViewRenderParams> => {
-        const styles = styleLinks(viewState.mermaidDocument.code.value);
 
         const code = `
 ${viewState.mermaidDocument.code.value}
@@ -212,6 +211,9 @@ ${styleScenes(viewState.mermaidDocument.code.value)}
 
     await this._diagramWebView?.init();
     this._diagramWebView?.reviel();
+    this._viewStateStore.dispatch(
+      createChangeMermaidDocumentEvent(this._mermaidDocumentProvider.document)
+    );
   }
 
   public async viewStateSelector(
