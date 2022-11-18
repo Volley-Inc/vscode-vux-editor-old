@@ -26,17 +26,95 @@ export const aggregateLinks = (text: string) => {
       (line, index) => [line as MermaidLine, index] as const
     );
 
-  const linkIndexes = links.map(([link, index]) => {
-    if (parseLink(link.link)) {
-      return index;
+  const linkGroups: Record<string, number[]> = {};
+
+  links.forEach(([link, index]) => {
+    const linkObject = parseLink(link.link);
+    if (!linkObject) {
+      return null;
     }
-    return null;
+    
+    const linkGroupKey = `${linkObject.cohort}${linkObject.group}`;
+
+    if (!linkGroups[linkGroupKey]) {
+      linkGroups[linkGroupKey] = [];
+    }
+
+    linkGroups[linkGroupKey].push(index);
   });
-  return linkIndexes.filter(i => i !== null);
+
+  return linkGroups;
 };
 
 export const styleLinks = (text: string) => {
-  const indexes = aggregateLinks(text);
-  const indexStr = indexes.join(',');
-  return indexes.length ? `linkStyle ${indexStr} stroke:orange;` : '';
+  let linkStyleString = "";
+
+  const linkGroups = aggregateLinks(text);
+
+  Object.values(linkGroups).forEach((linkGroup, index) => {
+    const indexStr = linkGroup.join(',');
+    const color = colorMap[index];
+
+    if (!color) {
+      throw new Error(`No color for index ${index}`);
+    }
+    linkStyleString += `linkStyle ${indexStr} stroke:${color};\n `;
+  });
+  
+  return linkStyleString;
 };
+
+const colorMap = [
+  'orange',
+  'red',
+  'green',
+  'blue',
+  'purple',
+  'yellow',
+  'pink',
+  'brown',
+  'black',
+  'white',
+  'gray',
+  'cyan',
+  'magenta',
+  'lime',
+  'maroon',
+  'navy',
+  'olive',
+  'teal',
+  'aqua',
+  'fuchsia',
+  'silver',
+  'indigo',
+  'violet',
+  'coral',
+  'crimson',
+  'gold',
+  'khaki',
+  'lavender',
+  'turquoise',
+];
+
+// Note: Hex colors seem to not be supported for this mermaid version
+function getUnusedColors(count: number) {
+  const colors: string[] = [];
+  
+  while(colors.length < count) {
+    const color = getRandomColor();
+    
+    if (!colors.includes(color)) {
+      colors.push(color);
+    }
+  }
+  return colors;
+}
+
+function getRandomColor() {
+  const letters = '0123456789abcdef';
+  let color = '#';
+  for (let i = 0; i < 3; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
